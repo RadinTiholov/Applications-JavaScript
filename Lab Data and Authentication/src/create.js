@@ -25,6 +25,7 @@ window.onload=function(){
             body: JSON.stringify(data)
         })
         .then(data => data.json())
+        .catch(err => {alert(err)})
         .then(user => {
             alert('gg')
             window.location.href = 'index.html';

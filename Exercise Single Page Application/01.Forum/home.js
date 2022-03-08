@@ -1,7 +1,21 @@
 const createButton = document.getElementById('createBtn');
 createButton.addEventListener('click', createPost);
+
+const cancelButton = document.getElementById('cancelBtn');
+cancelButton.addEventListener('click', cancelPost);
+
 const topicContainer = document.getElementsByClassName('topic-container')[0];
 
+function cancelPost(e){
+    e.preventDefault();
+    const topicNameElement = document.getElementById('topicName');
+    const usernameElement = document.getElementById('username');
+    const postTextElement = document.getElementById('postText');
+
+    topicNameElement.value = '';
+    usernameElement.value = '';
+    postTextElement.value = '';
+}
 function createPost(e){
     e.preventDefault();
 
@@ -44,5 +58,38 @@ function makeRequest(data){
 }
 function visualiseData(data){
     //Vis with html
-    console.log(data);
+    let date = Date(Date.now()).toString();
+    date = date.substring(0, date.indexOf('('));
+    topicContainer.innerHTML += `<div class="topic-name-wrapper">
+    <div class="topic-name">
+        <a class="normal" >
+            <h2 href="/comment" data-id = "${data['_id']}">${data['topicName']}</h2>
+        </a>
+        <div class="columns">
+            <div>
+                <p>Date: <time>${ /*I don't know from where to get the post date*/date}</time></p>
+                <div class="nick-name">
+                    <p>Username: <span>${data['username']}</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>`
+}
+export function loadAll(){
+    fetch('http://localhost:3030/jsonstore/collections/myboard/posts')
+    .then(res => res.json())
+    .catch(err => alert(err))
+    .then(res => {
+        res = Object.values(res);
+        for (const item of res) {
+            const data = {
+                'topicName' : item['topicName'],
+                'postText' : item['postText'],
+                'username': item['username'],
+                '_id': item['_id'],
+            }
+            visualiseData(data);
+        }
+    })
 }

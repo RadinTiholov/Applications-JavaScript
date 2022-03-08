@@ -11,6 +11,7 @@
     <title>SoftUni Forum</title>
     <script src = '/01.Forum/app.js' type="module"></script>
     <script src = '/01.Forum/home.js' type="module"></script>
+    <script src = '/01.Forum/comment.js' type="module"></script>
 </head>
 
 <body>
@@ -81,15 +82,24 @@
                     <div class="theme-name-wrapper">
                         <div class="theme-name">
                             <h2>Angular 10</h2>
-    
                         </div>
-    
                     </div>
                 </div>
                 <!-- comment  -->
     
                 <div class="comment">
-    
+                
+                    <div id="user-comment">
+                        <div class="topic-name-wrapper">
+                            <div class="topic-name">
+                                <p><strong>Daniel</strong> commented on <time>3/15/2021, 12:39:02 AM</time></p>
+                                <div class="post-content">
+                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure facere sint
+                                        dolorem quam.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
     
                 <div class="answer-comment">
@@ -101,7 +111,7 @@
                                 <label for="username">Username <span class="red">*</span></label>
                                 <input type="text" name="username" id="username">
                             </div>
-                            <button>Post</button>
+                            <button  id = 'commentBtn'>Post</button>
                         </form>
                     </div>
                 </div>

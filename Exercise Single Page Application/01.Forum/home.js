@@ -30,10 +30,12 @@ function createPost(e){
         alert("Empty data")
     }
     else{
+        let currentTime = Date(Date.now()).toString();
         const data = {
             topicName,
             username,
-            postText
+            postText,
+            currentTime: currentTime.substring(0, currentTime.indexOf('('))
         }
         makeRequest(data);
 
@@ -58,8 +60,6 @@ function makeRequest(data){
 }
 function visualiseData(data){
     //Vis with html
-    let date = Date(Date.now()).toString();
-    date = date.substring(0, date.indexOf('('));
     topicContainer.innerHTML += `<div class="topic-name-wrapper">
     <div class="topic-name">
         <a class="normal" >
@@ -67,7 +67,7 @@ function visualiseData(data){
         </a>
         <div class="columns">
             <div>
-                <p>Date: <time>${ /*I don't know from where to get the post date*/date}</time></p>
+                <p>Date: <time>${data['currentTime']}</time></p>
                 <div class="nick-name">
                     <p>Username: <span>${data['username']}</span></p>
                 </div>
@@ -88,6 +88,7 @@ export function loadAll(){
                 'postText' : item['postText'],
                 'username': item['username'],
                 '_id': item['_id'],
+                'currentTime' : item['currentTime']
             }
             visualiseData(data);
         }

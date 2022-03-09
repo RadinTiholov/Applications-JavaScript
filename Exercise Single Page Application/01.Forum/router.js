@@ -27,7 +27,6 @@ function showComment(id){
     hideAll();
     commentPage.style.display = 'block'
 
-    let data = {};
     fetch('http://localhost:3030/jsonstore/collections/myboard/posts')
     .then(res => res.json())
     .catch(err => alert(err))

@@ -12,10 +12,12 @@ function onComment(e){
         alert('Cannot add empty comment');
     }
     else{
+        let currentTime = Date(Date.now()).toString();
         const data = {
             comment,
             username,
-            '_id': localStorage.getItem('_id')
+            'ownerId': localStorage.getItem('_id'),
+            currentTime: currentTime.substring(0, currentTime.indexOf('('))
         }
         makeRequest(data);
 
@@ -35,42 +37,18 @@ function makeRequest(data){
     .then(res => res.json())
     .catch(err => alert(err))
     .then(res => {
-        showAllComments();
+        allComments();
     })
 }
 export function showAllComments(){
-    clearAll();
-    const id = localStorage.getItem('_id');
-    showPost(id);
-
-    const url = 'http://localhost:3030/jsonstore/collections/myboard/comments';
-    fetch(url)
-    .then(res => res.json())
-    .catch(err => alert(err))
-    .then(res => {
-        res = Object.values(res);
-        for (const item of res) {
-            console.log(id);
-            console.log(item);
-            commentsElement.innerHTML += `<div id="user-comment">
-            <div class="topic-name-wrapper">
-                <div class="topic-name">
-                    <p><strong>${item['username']}</strong> commented on <time>3/15/2021, 12:39:02 AM</time></p>
-                    <div class="post-content">
-                        <p>${item['comment']}</p>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-            
-        }
-    })
+    allComments();
 }
-function clearAll(){
+async function allComments(){
     commentsElement.innerHTML = '';
-}
-async function showPost(id){
-    fetch('http://localhost:3030/jsonstore/collections/myboard/posts')
+    const id = localStorage.getItem('_id');
+
+    //get post 
+    await fetch('http://localhost:3030/jsonstore/collections/myboard/posts')
     .then(res => res.json())
     .catch(err => alert(err))
     .then(res => {
@@ -79,11 +57,37 @@ async function showPost(id){
             if (item['_id'] == id) {
             commentsElement.innerHTML += `<div class="header">
             <img src="./static/profile.png" alt="avatar">
-            <p><span>${item['username']}</span> posted on <time>2020-10-10 12:08:28</time></p>
+            <p><span>${item['username']}</span> posted on <time>${item['currentTime']}</time></p>
         
             <p class="post-content">${item['postText']}</p>
         </div>`;
             }
         }
     })
+
+    const url = 'http://localhost:3030/jsonstore/collections/myboard/comments';
+    fetch(url)
+    .then(res => res.json())
+    .catch(err => alert(err))
+    .then(res => {
+        res = Object.values(res);
+        for (const item of res) {
+            if (id == item['ownerId']) {
+            commentsElement.innerHTML += `<div id="user-comment">
+            <div class="topic-name-wrapper">
+                <div class="topic-name">
+                    <p><strong>${item['username']}</strong> commented on <time>${item['currentTime']}</time></p>
+                    <div class="post-content">
+                        <p>${item['comment']}</p>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+            }
+            
+        }
+    })
+}
+function clearAll(){
+    commentsElement.innerHTML = '';
 }

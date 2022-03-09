@@ -1,4 +1,5 @@
 const section = document.getElementById('discription');
+import {showView} from './router.js'
 
 export function detailsPage(id) {
     updateDataForDetailsPage(id);
@@ -23,6 +24,11 @@ async function updateDataForDetailsPage(id){
     ]);
 
     section.replaceChildren(createMovieCard(movie, user, likes, ownLike));
+
+    const deleteButton = document.getElementById('deleteBtn');
+    const editButton = document.getElementById('editBtn');
+    deleteButton.addEventListener('click', (e) => deleteFilm(e, movie._id));
+    editButton.addEventListener('click', (e) => editFilm(e, movie._id));
 }
 function createMovieCard(movie, user, likes, ownLike) {
     const element = document.createElement('div');
@@ -45,31 +51,79 @@ function createMovieCard(movie, user, likes, ownLike) {
     if (likeBtn) {
         likeBtn.addEventListener('click', (e) => likeMovie(e, movie._id));
     }
-    
-    const deleteButton = element.querySelector('.btn-danger');
-    const editButton = element.querySelector('.btn-warning');
-    deleteButton.addEventListener('click', (e) => deleteFilm(e, movie._id));
-    editButton.addEventListener('click', (e) => editFilm(e, movie._id));
 
     return element;
 }
 function deleteFilm(e, id){
-    console.log('delete ' + id);
+    
+    const deleteUrl = `http://localhost:3030/data/movies/${id}`;
+    fetch(deleteUrl, {
+        method: 'DELETE',
+        headers: {
+            'X-Authorization': localStorage.getItem('accessToken')
+        }})
+    .then(res => res.json)
+    .catch(err => alert(err))
+    .then(res => {
+        showView('/');
+    })
 }
 function editFilm(e, id){
-    console.log('edit ' + id);
+    e.preventDefault();
+    showView('/edit');
+    const updateUrl = `http://localhost:3030/data/movies/${id}`;
+    const form = document.getElementById('edit-movie').children[0];
+    form.addEventListener('submit', (e => {
+        const formData = new FormData(form);
+
+        const title = formData.get('title');
+        const description = formData.get('description');
+        const img = formData.get('imageUrl');
+        if (title == '' || description == '' || img == '') {
+            alert('Cannot update a post with empty data.')
+        }
+        else{
+            updateMovie(title, description, img, updateUrl);
+            form.reset();
+            showView('/');
+        }
+    }))
+    
+}
+function updateMovie(title, description, img, updateUrl){
+    fetch(updateUrl, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Authorization': localStorage.getItem('accessToken')
+                    },
+                    body: JSON.stringify({
+                        title,
+                        description,
+                        img
+                    })
+                })
+                .catch(err => {
+                    alert(err);
+                })
+                .then(res => {
+                    if (res.status !== 200) {
+                        alert("Cannot edit other's blogs")
+                    }
+                    showView('/');
+                });
 }
 function createControls(movie, user, ownLike) {
     const isOwner = user && user._id == movie._ownerId;
     let buttons = [];
     if (isOwner) {
-        buttons.push('<a class="btn btn-danger" href="#">Delete</a>');
-        buttons.push('<a class="btn btn-warning" href="#">Edit</a>');
+        buttons.push('<a id ="deleteBtn" class="btn btn-danger">Delete</a>');
+        buttons.push('<a id = "editBtn" class="btn btn-warning" href = "/edit">Edit</a>');
     }
     else if(user && ownLike == false){
         buttons.push('<a class="btn btn-primary like-btn" href="#">Like</a>');
     }
-
+    
     return buttons.join(' ');
 }
 async function getMovie(id) {

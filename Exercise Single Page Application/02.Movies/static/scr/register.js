@@ -11,11 +11,11 @@ function registerIn(e){
     const email = emailElement.value;
     const password = passwordElement.value;
     const repeatPassword = repeatPasswordElement.value;
-    if (email == '' || password == '' || repeatPassword == '' || repeatPassword != password) {
+    if (email == '' || password == '' || repeatPassword == '' || repeatPassword != password || password.length < 6) {
         alert("Cannot register with empty or wrong data");
     }
     else{
-        fetch(url, {
+        fetch('http://localhost:3030/users/register', {
             method: 'POST',
             headers: {
               'content-type': 'application/json'
@@ -26,9 +26,9 @@ function registerIn(e){
             })
         })
         .then(data => data.json())
-        .catch(err => {alert('Error')})
         .then(user => {
             if (user.hasOwnProperty('message')) {
+                //error
                 alert(user.message);
             }else{
                 localStorage.setItem('accessToken', user.accessToken);
@@ -36,7 +36,8 @@ function registerIn(e){
                 localStorage.setItem('email', user.email);
                 localStorage.setItem('username', user.username);
                 showView('/');
-                }
-            })
+            }
+        })
+        
     }
 }

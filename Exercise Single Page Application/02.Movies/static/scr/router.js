@@ -14,7 +14,8 @@ const routes = {
     '/login' : showLogin,
     '/register' : showRegister,
     '/addmovies' : showAddMovieView,
-    '/details': showDetails
+    '/details': showDetails,
+    '/edit': editMovie,
 }
 
 export function showView(path){
@@ -48,4 +49,7 @@ function showAddMovieView(){
 }
 function showDetails(){
     discriptionElement.style.display = 'block';
+}
+function editMovie(){
+    editMovieElement.style.display = 'block';
 }

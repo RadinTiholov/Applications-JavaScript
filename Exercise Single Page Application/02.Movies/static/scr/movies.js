@@ -19,7 +19,7 @@ export function loadMovies(){
                 <h4 class="card-title">${item.title}</h4>
             </div>
             <div class="card-footer">
-                <a href="/details/${item._id}">
+                <a>
                     <button data-id="${item._id}" type="button" class="btn btn-info">Details</button>
                 </a>
             </div>`;

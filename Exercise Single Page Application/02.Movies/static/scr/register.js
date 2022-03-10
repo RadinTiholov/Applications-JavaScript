@@ -15,7 +15,7 @@ function registerIn(e){
         alert("Cannot register with empty or wrong data");
     }
     else{
-        fetch('http://localhost:3030/users/register', {
+        fetch('url', {
             method: 'POST',
             headers: {
               'content-type': 'application/json'

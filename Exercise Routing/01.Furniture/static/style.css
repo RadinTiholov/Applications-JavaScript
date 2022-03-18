@@ -211,3 +211,6 @@ img {
 .is-invalid {
     border-left: 2px solid red;
 }
+#user, #guest{
+    display: none;
+}

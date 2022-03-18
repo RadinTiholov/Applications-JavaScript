@@ -5,7 +5,7 @@ async function request(url, option) {
    
       if (response.ok == false) {
         const error = response.json();
-        alert(error.message);
+        alert("Ooops. Error! Try again!");
         throw new Error(error.message);
       }
    
@@ -16,13 +16,12 @@ async function request(url, option) {
         return response;
       }
     } catch (err) {
-      alert(err.message);
       throw err;
     }
   }
    
   export const settings = {
-      host: ''
+      host: 'http://localhost:3030'
   };
    
   function createOptions(method = 'get', data) {
@@ -63,7 +62,7 @@ async function request(url, option) {
   }
    
   export async function login(email, password) {
-      const result = await post(settings.host + '/users/login', {email, password});
+      const result = await post('http://localhost:3030/users/login', {email, password});
       sessionStorage.setItem('userId', result._id);
       sessionStorage.setItem('userToken', result.accessToken);
       sessionStorage.setItem('userEmail', result.email);
@@ -71,7 +70,7 @@ async function request(url, option) {
   }
    
   export async function register(email, password) {
-    const result = await post(settings.host + '/users/register', {email, password});
+    const result = await post('http://localhost:3030/users/register', {email, password});
     sessionStorage.setItem('userId', result._id);
     sessionStorage.setItem('userToken', result.accessToken);
     sessionStorage.setItem('userEmail', result.email);
@@ -79,7 +78,7 @@ async function request(url, option) {
   }
    
   export async function logout() {
-    const result = await get(settings.host + '/users/logout');
+    const result = await get('http://localhost:3030/users/logout');
     sessionStorage.removeItem('userId');
     sessionStorage.removeItem('userToken');
     sessionStorage.removeItem('userEmail');

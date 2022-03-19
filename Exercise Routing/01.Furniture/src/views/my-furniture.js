@@ -28,6 +28,5 @@ const template = (data) => {
 export async function myFurniturePage(ctx){
     const id = sessionStorage.getItem('userId');
     const data = Object.values(await ctx.data.getMyFurniture(id));
-    console.log(data);
     ctx.render(template(data));
 }

@@ -7,7 +7,6 @@ import { loginPage } from "./views/login.js";
 import { myFurniturePage } from "./views/my-furniture.js";
 import { registerPage } from "./views/register.js";
 import * as data from "./data.js";
-import { logout } from './api.js';
 window.data = data;
 
 const root = document.querySelector('.container')
@@ -29,7 +28,6 @@ updateUserNav();
 async function onLogout(e){
     const res = await data.logout();
     updateUserNav();
-    console.log('onLogout');
     goToHome();
 }
 async function goToHome(){

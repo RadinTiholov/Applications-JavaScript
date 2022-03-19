@@ -27,6 +27,5 @@ const template = (data) => {
 }
 export async function catalogPage(ctx){
     const data = Object.values(await ctx.data.getAllFurniture());
-    console.log(data);
     ctx.render(template(data));
 }

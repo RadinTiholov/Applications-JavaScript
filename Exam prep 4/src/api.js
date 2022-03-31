@@ -66,14 +66,19 @@ async function request(url, option) {
       sessionStorage.setItem('userId', result._id);
       sessionStorage.setItem('userToken', result.accessToken);
       sessionStorage.setItem('userEmail', result.email);
+      sessionStorage.setItem('username', result.username);
+      sessionStorage.setItem('gender', result.gender);
       return await result;
   }
    
   export async function register(data) {
     const result = await post('http://localhost:3030/users/register', data);
+    console.log(result);
     sessionStorage.setItem('userId', result._id);
     sessionStorage.setItem('userToken', result.accessToken);
     sessionStorage.setItem('userEmail', result.email);
+    sessionStorage.setItem('username', result.username);
+    sessionStorage.setItem('gender', result.gender);
     return await result;
   }
    
@@ -82,5 +87,7 @@ async function request(url, option) {
     sessionStorage.removeItem('userId');
     sessionStorage.removeItem('userToken');
     sessionStorage.removeItem('userEmail');
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('gender');
     return await result;
   }
